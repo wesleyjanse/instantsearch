@@ -73,7 +73,8 @@ export function InstantSearchNext<
   }, []);
 
   const nonce = safelyRunOnBrowser(() => undefined, {
-    fallback: () => headers().get('x-nonce') || undefined,
+    fallback: () =>
+      headers().then((headerStore) => headerStore.get('x-nonce') || undefined),
   });
 
   const routing = useInstantSearchRouting(passedRouting, isMounting);

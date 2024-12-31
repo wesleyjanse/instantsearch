@@ -31,9 +31,12 @@ export function useInstantSearchRouting<
 
     browserHistoryOptions.getLocation = () => {
       if (typeof window === 'undefined') {
-        const url = `${
-          headers().get('x-forwarded-proto') || 'http'
-        }://${headers().get('host')}${pathname}?${searchParams}`;
+        const xForwardedProto = headers().then(
+          (headerStore) => headerStore.get('x-forwarded-proto') || 'http'
+        );
+        const host = headers().then((headerStore) => headerStore.get('host'));
+
+        const url = `${xForwardedProto}://${host}${pathname}?${searchParams}`;
         return new URL(url) as unknown as Location;
       }
 
